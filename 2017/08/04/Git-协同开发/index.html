@@ -1,0 +1,1065 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="工具,开发," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="我有一头小毛驴，可是我从来都不骑   目录 前言 仓库（Repository）  源仓库 开发者仓库   分支（Branch）  永久性分支 暂时性分支   工作流（workflow） 总结 参考资料">
+<meta name="keywords" content="工具,开发">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Git-协同开发">
+<meta property="og:url" content="http://yoursite.com/2017/08/04/Git-协同开发/index.html">
+<meta property="og:site_name" content="fc c 的 前端之路">
+<meta property="og:description" content="我有一头小毛驴，可是我从来都不骑   目录 前言 仓库（Repository）  源仓库 开发者仓库   分支（Branch）  永久性分支 暂时性分支   工作流（workflow） 总结 参考资料">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/centr-decentr@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/main-branches@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/fb@2x.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-branch.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-fork.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-fork-origin.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-push.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-pull-request.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-pull-request-origin.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/pull-request-origin.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-review.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/merge.png">
+<meta property="og:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-model@2x.png">
+<meta property="og:updated_time" content="2017-08-04T05:28:57.863Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Git-协同开发">
+<meta name="twitter:description" content="我有一头小毛驴，可是我从来都不骑   目录 前言 仓库（Repository）  源仓库 开发者仓库   分支（Branch）  永久性分支 暂时性分支   工作流（workflow） 总结 参考资料">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/livoras/blog-images/master/git/centr-decentr@2x.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    sidebar: {"position":"left","display":"post","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/08/04/Git-协同开发/"/>
+
+
+
+
+
+  <title>Git-协同开发 | fc c 的 前端之路</title>
+  
+
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=63042636";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">fc c 的 前端之路</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">Menschenalter</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/08/04/Git-协同开发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="fc c">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.jpg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="fc c 的 前端之路">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Git-协同开发</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-08-04T12:45:23+08:00">
+                2017-08-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/前端/" itemprop="url" rel="index">
+                    <span itemprop="name">前端</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+             <span id="/2017/08/04/Git-协同开发/" class="leancloud_visitors" data-flag-title="Git-协同开发">
+               <span class="post-meta-divider">|</span>
+               <span class="post-meta-item-icon">
+                 <i class="fa fa-eye"></i>
+               </span>
+               
+                 <span class="post-meta-item-text">阅读次数 </span>
+               
+                 <span class="leancloud-visitors-count"></span>
+             </span>
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>我有一头<strong>小毛驴</strong>，可是我从来都不骑 </p>
+</blockquote>
+<h3 id="目录"><a href="#目录" class="headerlink" title="目录"></a>目录</h3><ul>
+<li>前言</li>
+<li><p>仓库（Repository）</p>
+<ul>
+<li>源仓库</li>
+<li>开发者仓库</li>
+</ul>
+</li>
+<li><p>分支（Branch）</p>
+<ul>
+<li>永久性分支</li>
+<li>暂时性分支</li>
+</ul>
+</li>
+<li>工作流（workflow）</li>
+<li>总结</li>
+<li>参考资料<a id="more"></a>
+<h3 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h3></li>
+</ul>
+<p>（本文假设各位已经对基本git的基本概念、操作有一定的理解，如无相关git知识，可以参考<a href="/book/327284.html">Pro Git</a>这本书进行相关的学习和练习）</p>
+<p>很多项目开发都会采用git这一优秀的分布式版本管理工具进行项目版本管理，使用github开源平台作为代码仓库托管平台。由于git的使用非常灵活，在实践当中衍生了很多种不同的工作流程，不同的项目、不同的团队会有不同的协作方式。</p>
+<p>本文将介绍一种前人已经在各种大小项目中经过千锤百炼总结出来的一种比较成功的git工作流，这种工作流已经被成功用于许多团队开发当中。掌握git，掌握这种工作流，对大家以后的学习、开发工作大有好处。</p>
+<p>先上一张图吓大家一下：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/centr-decentr@2x.png" alt="workflow"></p>
+<p>上面一张图展示了一种使用git进行项目协同开发的模式，接下来会进行详细介绍。</p>
+<h3 id="仓库（Repository）"><a href="#仓库（Repository）" class="headerlink" title="仓库（Repository）"></a>仓库（Repository）</h3><p>在项目的开始到结束，我们会有两种仓库。一种是源仓库（origin），一种是开发者仓库。上图中的每个矩形都表示一个仓库，正中间的是我们的源仓库，而其他围绕着源仓库的则是开发者仓库。</p>
+<h4 id="源仓库"><a href="#源仓库" class="headerlink" title="源仓库"></a>源仓库</h4><p>在项目的开始，项目的发起者构建起一个项目的最原始的仓库，我们把它称为<code>origin</code>，例如我们的PingHackers网站，<code>origin</code>就是这个<a href="https://github.com/PingHackers/blog" target="_blank" rel="external">PingHackers/blog</a>了。源仓库的有两个作用：</p>
+<ol>
+<li>汇总参与该项目的各个开发者的代码</li>
+<li>存放趋于稳定和可发布的代码</li>
+</ol>
+<p>源仓库应该是受保护的，开发者不应该直接对其进行开发工作。只有项目管理者（通常是项目发起人）能对其进行较高权限的操作。</p>
+<h4 id="开发者仓库"><a href="#开发者仓库" class="headerlink" title="开发者仓库"></a>开发者仓库</h4><p>上面说过，任何开发者都不会对源仓库进行直接的操作，源仓库建立以后，每个开发者需要做的事情就是把源仓库的“复制”一份，作为自己日常开发的仓库。这个复制，也就是github上面的<code>fork</code>。</p>
+<p>每个开发者所fork的仓库是完全独立的，互不干扰，甚至与源仓库都无关。每个开发者仓库相当于一个源仓库实体的影像，开发者在这个影像中进行编码，提交到自己的仓库中，这样就可以轻易地实现团队成员之间的并行开发工作。而开发工作完成以后，开发者可以向源仓库发送<code>pull request</code>，请求管理员把自己的代码合并到源仓库中，这样就实现了<strong>分布式开发工作</strong>，和最后的集中式的管理。</p>
+<h3 id="分支（Branch）"><a href="#分支（Branch）" class="headerlink" title="分支（Branch）"></a>分支（Branch）</h3><p>分支是git中非常重要的一个概念，也是git这一个工具中的大杀器，必杀技。在其他集中式版本管理工具（SVN/CVS）把分支定位为高级技巧，而在git中，分支操作则是每个开发人员日常工作流。利用git的分支，可以非常方便地进行开发和测试，如果使用git没有让你感到轻松和愉悦，那是因为你还没有学会使用分支。不把分支用出一点翔来，不要轻易跟别人说你用过git。</p>
+<p>在文章开头的那张图中，每一个矩形内部纷繁的枝蔓便是git的分支模型。可以看出，每个开发者的仓库都有自己的分支路线，而这些分支路线会通过代码汇总映射到源仓库中去。</p>
+<p>我们为git定下一种分支模型，在这种模型中，分支有两类，五种</p>
+<ul>
+<li><p>永久性分支</p>
+<ul>
+<li><code>master branch</code>：主分支</li>
+<li><code>develop branch</code>：开发分支</li>
+</ul>
+</li>
+<li><p>临时性分支</p>
+<ul>
+<li><code>feature branch</code>：功能分支</li>
+<li><code>release branch</code>：预发布分支</li>
+<li><code>hotfix branch</code>：bug修复分支</li>
+</ul>
+</li>
+</ul>
+<h4 id="永久性分支"><a href="#永久性分支" class="headerlink" title="永久性分支"></a>永久性分支</h4><p>永久性分支是寿命无限的分支，存在于整个项目的开始、开发、迭代、终止过程中。永久性分支只有两个<code>master</code>和<code>develop</code>。</p>
+<p><strong>master</strong>：主分支从项目一开始便存在，它用于存放经过测试，已经完全稳定代码；在项目开发以后的任何时刻当中，<code>master</code>存放的代码应该是可作为产品供用户使用的代码。所以，应该随时保持<code>master</code>仓库代码的清洁和稳定，确保入库之前是通过完全测试和代码reivew的。<code>master</code>分支是所有分支中最不活跃的，大概每个月或每两个月更新一次，每一次<code>master</code>更新的时候都应该用git打上<code>tag</code>，说明你的产品有新版本发布了。</p>
+<p><strong>develop</strong>：开发分支，一开始从master分支中分离出来，用于开发者存放基本稳定代码。之前说过，每个开发者的仓库相当于源仓库的一个镜像，每个开发者自己的仓库上也有<code>master</code>和<code>develop</code>。开发者把功能做好以后，是存放到自己的<code>develop</code>中，当测试完以后，可以向管理者发起一个<code>pull request</code>，请求把自己仓库的<code>develop</code>分支合并到源仓库的<code>develop</code>中。</p>
+<p>所有开发者开发好的功能会在源仓库的<code>develop</code>分支中进行汇总，当<code>develop</code>中的代码经过不断的测试，已经逐渐趋于稳定了，接近产品目标了。这时候，我们就可以把<code>develop</code>分支合并到<code>master</code>分支中，发布一个新版本。所以，一个产品不断完善和发布过程就正如下图：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/main-branches@2x.png" alt="master &amp; develop"></p>
+<p>注意，任何人不应该向<code>master</code>直接进行无意义的合并、提交操作。正常情况下，<code>master</code>只应该接受<code>develop</code>的合并，也就是说，<code>master</code>所有代码更新应该源于合并<code>develop</code>的代码。</p>
+<h4 id="暂时性分支"><a href="#暂时性分支" class="headerlink" title="暂时性分支"></a>暂时性分支</h4><p>暂时性分支和永久性分支不同，暂时性分支在开发过程中是一定会被删除的。所有暂时性分支，一般源于<code>develop</code>，最终也一定会回归合并到<code>develop</code>。</p>
+<p><strong>feature</strong>：功能性分支，是用于开发项目的功能的分支，是开发者主要战斗阵地。开发者在本地仓库从<code>develop</code>分支分出功能分支，在该分支上进行功能的开发，开发完成以后再合并到<code>develop</code>分支上，这时候功能性分支已经完成任务，可以删除。功能性分支的命名一般为<code>feature-*</code>，*为需要开发的功能的名称。</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/fb@2x.png" alt="feature branch"></p>
+<p>举一个例子，假设我是一名PingHackers网站的开发者，已经把源仓库fork了，并且clone到了本地。现在要开发PingHackers网站的“讨论”功能。我在本地仓库中可以这样做：</p>
+<p>step 1: 切换到<code>develop</code>分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; git checkout develop</div></pre></td></tr></table></figure>
+<p>step 2: 分出一个功能性分支</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; git checkout -b feature-discuss</div></pre></td></tr></table></figure>
+<p>step 3: 在功能性分支上进行开发工作，多次commit，测试以后…</p>
+<p>step 4: 把做好的功能合并到<code>develop</code>中</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; git checkout develop      # 回到develop分支      &gt;&gt;&gt; git merge --no-ff feature-discuss     # 把做好的功能合并到develop中      &gt;&gt;&gt; git branch -d feature-discuss     # 删除功能性分支      &gt;&gt;&gt; git push origin develop     # 把develop提交到自己的远程仓库中</div></pre></td></tr></table></figure>
+<p>这样，就完成一次功能的开发和提交。</p>
+<p><strong>release</strong>：预发布分支，当产品即将发布的时候，要进行最后的调整和测试，这时候就可以分出一个预发布分支，进行最后的bug fix。测试完全以后，发布新版本，就可以把预发布分支删除。预发布分支一般命名为<code>release-*</code>。</p>
+<p><strong>hotfix</strong>：修复bug分支，当产品已经发布了，突然出现了重大的bug。这时候就要新建一个<code>hotfix</code>分支，继续紧急的bug修复工作，当bug修复完以后，把该分支合并到<code>master</code>和<code>develop</code>以后，就可以把该分支删除。修复bug分支命名一般为<code>hotfix-*</code></p>
+<p><code>release</code>和<code>hotfix</code>分支离我们还比较遥远。。就不详述，有兴趣的同学可以参考本文最后的参考资料进行学习。</p>
+<h3 id="工作流（Workflow）"><a href="#工作流（Workflow）" class="headerlink" title="工作流（Workflow）"></a>工作流（Workflow）</h3><p>啰嗦讲了这么多，概念永远是抽象的。对于新手来说，都喜欢一步一步的步骤傻瓜教程，接下来，我们就一步一步来操作上面所说的工作流程，大家感受一下：</p>
+<h4 id="Step-1：源仓库的构建"><a href="#Step-1：源仓库的构建" class="headerlink" title="Step 1：源仓库的构建"></a>Step 1：源仓库的构建</h4><p>这一步通常由项目发起人来操作，我们这里把管理员设为PingHackers，假设PingHackers已经为我们建立起了一个源仓库<a href="https://github.com/PingHackers/git-demo" target="_blank" rel="external">PingHackers/git-demo</a>，并且已经初始化了两个永久性分支<code>master</code>和<code>develop</code>，如图：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-branch.png" alt="origin"></p>
+<h4 id="Step-2：开发者fork源仓库"><a href="#Step-2：开发者fork源仓库" class="headerlink" title="Step 2：开发者fork源仓库"></a>Step 2：开发者fork源仓库</h4><p>源仓库建立以后，每个开发就可以去复制一份源仓库到自己的github账号中，然后作为自己开发所用的仓库。假设我是一个项目中的开发者，我就到<a href="https://github.com/PingHackers/git-demo" target="_blank" rel="external">PingHackers/git-demo</a>项目主页上去<code>fork</code>：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-fork.png" alt="fork"></p>
+<p><code>fork</code>完以后，我就可以在我自己的仓库列表中看到一个和源仓库一模一样的复制品。这时就应该感叹，你以后要和它相依为命了：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-fork-origin.png" alt="fork-origin"></p>
+<h4 id="Step-3：把自己开发者仓库clone到本地"><a href="#Step-3：把自己开发者仓库clone到本地" class="headerlink" title="Step 3：把自己开发者仓库clone到本地"></a>Step 3：把自己开发者仓库clone到本地</h4><p>这一步应该不用教，git clone</p>
+<h4 id="Step-4：构建功能分支进行开发"><a href="#Step-4：构建功能分支进行开发" class="headerlink" title="Step 4：构建功能分支进行开发"></a>Step 4：构建功能分支进行开发</h4><p>进入仓库中，按照前面说所的构建功能分支的步骤，构建功能分支进行开发、合并，假设我现在要开发一个“讨论”功能：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt;&gt; git checkout develop     # 切换到`develop`分支      &gt;&gt;&gt; git checkout -b feature-discuss     # 分出一个功能性分支      &gt;&gt; touch discuss.js     # 假装discuss.js就是我们要开发的功能      &gt;&gt; git add .     &gt;&gt; git commit -m &apos;finish discuss feature&apos;     # 提交更改      &gt;&gt;&gt; git checkout develop     # 回到develop分支      &gt;&gt;&gt; git merge --no-ff feature-discuss     # 把做好的功能合并到develop中      &gt;&gt;&gt; git branch -d feature-discuss     # 删除功能性分支      &gt;&gt;&gt; git push origin develop     # 把develop提交到自己的远程仓库中</div></pre></td></tr></table></figure>
+<p>这时候，你上自己github的项目主页中<code>develop</code>分支中看看，已经有<code>discuss.js</code>这个文件了：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-push.png" alt="push"></p>
+<h4 id="Step-5：向管理员提交pull-request"><a href="#Step-5：向管理员提交pull-request" class="headerlink" title="Step 5：向管理员提交pull request"></a>Step 5：向管理员提交pull request</h4><p>假设我完成了“讨论”功能（当然，你还可能对自己的<code>develop</code>进行了多次合并，完成了多个功能），经过测试以后，觉得没问题，就可以请求管理员把<strong>自己仓库的develop分支</strong>合并到<strong>源仓库的develop</strong>分支中，这就是传说中的<code>pull request</code>。</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-pull-request.png" alt="pull-request"></p>
+<p>点击上图的绿色按钮，开发者就可以就可以静静地等待管理员对你的提交的评审了。</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-pull-request-origin.png" alt="pull-finished"></p>
+<h4 id="Step-6-管理员测试、合并"><a href="#Step-6-管理员测试、合并" class="headerlink" title="Step 6 管理员测试、合并"></a>Step 6 管理员测试、合并</h4><p>接下来就是管理员的操作了，作为管理员的PingHackers登陆github，便看到了我对源仓库发起的<code>pull request</code>。</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/pull-request-origin.png" alt="pull-request-origin"></p>
+<p>这时候PingHackers需要做的事情就是：</p>
+<ol>
+<li><strong>对我的代码进行review</strong>。github提供非常强大的代码review功能：<br><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-demo-review.png" alt="reivew"></li>
+<li><p><strong>在他的本地测试新建一个测试分支</strong>，测试我的代码：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; git checkout develop # 进入他本地的develop分支  &gt;&gt; git checkout -b livoras-develop # 从develop分支中分出一个叫livoras-develop的测试分支测试我的代码  &gt;&gt; git pull https://github.com/livoras/git-demo.git develop # 把我的代码pull到测试分支中，进行测试</div></pre></td></tr></table></figure>
+</li>
+<li><p><strong>判断是否同意合并到源仓库的<code>develop</code>中</strong>，如果经过测试没问题，可以把我的代码合并到源仓库的<code>develop</code>中：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">&gt;&gt; git checkout develop &gt;&gt; git merge --no-ff livoras-develop &gt;&gt; git push origin develop</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<p>注意，PingHakers一直在操作的仓库是源仓库。所以我们经过上面一系列操作以后，就可以在源仓库主页中看到：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/merge.png" alt="merge"></p>
+<p>经过辗转曲折的路程，我们的<code>discuss.js</code>终于从我的开发仓库的功能分支到达了源仓库的<code>develop</code>分支中。以上，就是一个git &amp; github协同工作流的基本步骤。</p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>git这一个工具博大精深，很难想象竟然有使用如此恶心而又如此灵活和优雅的工具存在；此又为一神器，大家还是多动手，多查资料，让git成为自己的一项基本技能，帮助自己处理各种项目团队协同工作的问题，成为一个高效的开发者、优秀的项目的管理者。送大家一张神图，好好领悟：</p>
+<p><img src="https://raw.githubusercontent.com/livoras/blog-images/master/git/git-model@2x.png" alt="Overview"></p>
+<p>最后给出一些参考资料，供参考学习。</p>
+<h3 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h3><ul>
+<li><a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="external">A Successful Git Branching Model</a></li>
+<li><a href="https://sandofsky.com/blog/git-workflow.html" target="_blank" rel="external">Understanding the Git Workflow</a></li>
+<li><a href="http://scottchacon.com/2011/08/31/github-flow.html" target="_blank" rel="external">Github flow</a></li>
+<li><a href="/book/327284.html">Pro Git</a></li>
+<li><a href="/managetool/20120707/321917.html">Git分支管理策略</a></li>
+</ul>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+  <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+    <div>坚持原创技术分享，您的支持将鼓励我继续创作！</div>
+    <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+      <span>赏</span>
+    </button>
+    <div id="QR" style="display: none;">
+      
+        <div id="wechat" style="display: inline-block">
+          <img id="wechat_qr" src="/images/wx.png" alt="fc c WeChat Pay"/>
+          <p>微信打赏</p>
+        </div>
+      
+      
+        <div id="alipay" style="display: inline-block">
+          <img id="alipay_qr" src="/images/zfb.jpg" alt="fc c Alipay"/>
+          <p>支付宝打赏</p>
+        </div>
+      
+    </div>
+  </div>
+
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/工具/" rel="tag"># 工具</a>
+          
+            <a href="/tags/开发/" rel="tag"># 开发</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/15/FirstNight/" rel="next" title="Web缓存">
+                <i class="fa fa-chevron-left"></i> Web缓存
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/08/04/正则及手机数字键盘/" rel="prev" title="正则及手机数字键盘">
+                正则及手机数字键盘 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+      <div id="lv-container" data-id="city" data-uid="MTAyMC8yOTUzMy82MTAx"></div>
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/images/avatar.jpg"
+               alt="fc c" />
+          <p class="site-author-name" itemprop="name">fc c</p>
+           
+              <p class="site-description motion-element" itemprop="description"></p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">4</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/cuifengchi" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="http://weibo.com/u/5902356188" target="_blank" title="微博">
+                  
+                    <i class="fa fa-fw fa-weibo"></i>
+                  
+                  微博
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://www.zhihu.com/people/miss-pie-jun-lin/answers" target="_blank" title="知乎">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  知乎
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#目录"><span class="nav-number">1.</span> <span class="nav-text">目录</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">2.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#仓库（Repository）"><span class="nav-number">3.</span> <span class="nav-text">仓库（Repository）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#源仓库"><span class="nav-number">3.1.</span> <span class="nav-text">源仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#开发者仓库"><span class="nav-number">3.2.</span> <span class="nav-text">开发者仓库</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分支（Branch）"><span class="nav-number">4.</span> <span class="nav-text">分支（Branch）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#永久性分支"><span class="nav-number">4.1.</span> <span class="nav-text">永久性分支</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#暂时性分支"><span class="nav-number">4.2.</span> <span class="nav-text">暂时性分支</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#工作流（Workflow）"><span class="nav-number">5.</span> <span class="nav-text">工作流（Workflow）</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-1：源仓库的构建"><span class="nav-number">5.1.</span> <span class="nav-text">Step 1：源仓库的构建</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-2：开发者fork源仓库"><span class="nav-number">5.2.</span> <span class="nav-text">Step 2：开发者fork源仓库</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-3：把自己开发者仓库clone到本地"><span class="nav-number">5.3.</span> <span class="nav-text">Step 3：把自己开发者仓库clone到本地</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-4：构建功能分支进行开发"><span class="nav-number">5.4.</span> <span class="nav-text">Step 4：构建功能分支进行开发</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-5：向管理员提交pull-request"><span class="nav-number">5.5.</span> <span class="nav-text">Step 5：向管理员提交pull request</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Step-6-管理员测试、合并"><span class="nav-number">5.6.</span> <span class="nav-text">Step 6 管理员测试、合并</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#参考资料"><span class="nav-number">7.</span> <span class="nav-text">参考资料</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">fc c</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Pisces
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+  
+  
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three.min.js"></script>
+
+  
+  <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.1"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+    <script type="text/javascript">
+      (function(d, s) {
+        var j, e = d.getElementsByTagName(s)[0];
+        if (typeof LivereTower === 'function') { return; }
+        j = d.createElement(s);
+        j.src = 'https://cdn-city.livere.com/js/embed.dist.js';
+        j.async = true;
+        e.parentNode.insertBefore(j, e);
+      })(document, 'script');
+    </script>
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+  <script src="https://cdn1.lncld.net/static/js/av-core-mini-0.6.4.js"></script>
+  <script>AV.initialize("WfxzKDS6hTm1loqkglPjtyeH-gzGzoHsz", "46AMI8MJqnmJRgmv3xulFSOd");</script>
+  <script>
+    function showTime(Counter) {
+      var query = new AV.Query(Counter);
+      var entries = [];
+      var $visitors = $(".leancloud_visitors");
+
+      $visitors.each(function () {
+        entries.push( $(this).attr("id").trim() );
+      });
+
+      query.containedIn('url', entries);
+      query.find()
+        .done(function (results) {
+          var COUNT_CONTAINER_REF = '.leancloud-visitors-count';
+
+          if (results.length === 0) {
+            $visitors.find(COUNT_CONTAINER_REF).text(0);
+            return;
+          }
+
+          for (var i = 0; i < results.length; i++) {
+            var item = results[i];
+            var url = item.get('url');
+            var time = item.get('time');
+            var element = document.getElementById(url);
+
+            $(element).find(COUNT_CONTAINER_REF).text(time);
+          }
+          for(var i = 0; i < entries.length; i++) {
+            var url = entries[i];
+            var element = document.getElementById(url);
+            var countSpan = $(element).find(COUNT_CONTAINER_REF);
+            if( countSpan.text() == '') {
+              countSpan.text(0);
+            }
+          }
+        })
+        .fail(function (object, error) {
+          console.log("Error: " + error.code + " " + error.message);
+        });
+    }
+
+    function addCount(Counter) {
+      var $visitors = $(".leancloud_visitors");
+      var url = $visitors.attr('id').trim();
+      var title = $visitors.attr('data-flag-title').trim();
+      var query = new AV.Query(Counter);
+
+      query.equalTo("url", url);
+      query.find({
+        success: function(results) {
+          if (results.length > 0) {
+            var counter = results[0];
+            counter.fetchWhenSave(true);
+            counter.increment("time");
+            counter.save(null, {
+              success: function(counter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(counter.get('time'));
+              },
+              error: function(counter, error) {
+                console.log('Failed to save Visitor num, with error message: ' + error.message);
+              }
+            });
+          } else {
+            var newcounter = new Counter();
+            /* Set ACL */
+            var acl = new AV.ACL();
+            acl.setPublicReadAccess(true);
+            acl.setPublicWriteAccess(true);
+            newcounter.setACL(acl);
+            /* End Set ACL */
+            newcounter.set("title", title);
+            newcounter.set("url", url);
+            newcounter.set("time", 1);
+            newcounter.save(null, {
+              success: function(newcounter) {
+                var $element = $(document.getElementById(url));
+                $element.find('.leancloud-visitors-count').text(newcounter.get('time'));
+              },
+              error: function(newcounter, error) {
+                console.log('Failed to create');
+              }
+            });
+          }
+        },
+        error: function(error) {
+          console.log('Error:' + error.code + " " + error.message);
+        }
+      });
+    }
+
+    $(function() {
+      var Counter = AV.Object.extend("Counter");
+      if ($('.leancloud_visitors').length == 1) {
+        addCount(Counter);
+      } else if ($('.post-title-link').length > 1) {
+        showTime(Counter);
+      }
+    });
+  </script>
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
